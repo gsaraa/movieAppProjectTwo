@@ -52,14 +52,15 @@ movieApp.printDropdowns =  function (genreData){
 movieApp.apiURL = 'https://api.themoviedb.org/3/discover/movie';
 movieApp.apiKey = 'e70332005f91b878abd0a2a43b066814';
 
-movieApp.getMovies = function(userGenreSelection) {
+movieApp.getMovies = function(userGenreSelection, userYearSelection) {
     const url = new URL(movieApp.apiURL);
     // console.log(userGenreSelection);
 
     url.search = new URLSearchParams({
         api_key: movieApp.apiKey,
-        language: "en-us",
-        with_genres: userGenreSelection
+        with_original_language: "en",
+        with_genres: userGenreSelection,
+        primary_release_year: userYearSelection
     })
     fetch(url)
     .then(function(apiResponse){
@@ -88,7 +89,7 @@ movieApp.displayMovie = function(movies) {
             movieTitle.innerText = movieItem.original_title;
             
             const moviePoster = document.createElement('img');
-            moviePoster.src = movieItem.poster_path;
+            moviePoster.src = `https://image.tmdb.org/t/p/w500/${movieItem.poster_path}`;
             moviePoster.alt = movieItem.title;
             
             const movieOverview = document.createElement('p');
@@ -99,14 +100,30 @@ movieApp.displayMovie = function(movies) {
             const ulElement = document.querySelector('.printMovies');
             ulElement.appendChild(liElements);
         });
+
+        movieApp.getYear();
     });
 };
 
 movieApp.getGenreId = function() {
     document.querySelector('#genre').addEventListener('change', function() {
         movieApp.getMovies(this.value);
-    })
+    });
+};
+
+movieApp.getYear = function() {
+    const yearSection = document.querySelector('#year');
+    // .addEventListener('change', function() {
+        // if (this.value === this.value && this.value < 10) {
+        //     movieApp.getMovies(userGenreSelection, [this].value)
+        //     console.log('hiya');
+        // }
+        console.log(yearSection);
+    // });
+
 }
+
+
 
 // 2. ========
 // INIT FUNCTION
